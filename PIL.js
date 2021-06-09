@@ -1,9 +1,14 @@
 var width = 1400, height = 800;
 var center = [];
+
+var tiltSlider;
+
 function setup() {
     createCanvas(1400, 800, WEBGL);
     center.x = width/6;
     center.y = 0;
+    
+    tiltSlider = new LineSlider(-width/2 + 50, -height/2 + 50, width/4, 25, 0, 0.25);
 }
 
 var time = 0.0, radius = 125.0;
@@ -18,9 +23,6 @@ var waveOffset = 0.0;
 var ringCount = 75, waveCount = 3;
 function draw() {
     background(15);
-    noFill();
-    stroke(255);
-    strokeWeight(1);
     colorA.x = 255;
     colorA.y = 50;
     colorA.z = 100;
@@ -35,7 +37,12 @@ function draw() {
     /*GUI
     */
     
+    stroke(255);
+    
     line(-width/6, -height/2, -width/6, height/2);
+    
+    tiltSlider.update();
+    
     
     
     translate(center.x, center.y);
@@ -44,6 +51,10 @@ function draw() {
   /* PIL Object
   Each curve (Peace (4 lines), Heart, Infinity) is parameterized with a single variable 0 < t < 1
   */
+    
+    noFill();
+    stroke(255);
+    strokeWeight(1);
     rotateY(time);
     
     /*PEACE*/
@@ -180,8 +191,10 @@ function draw() {
         WAVE INTENSITY
         WAVE COLOR
     */
+    
     strokeWeight(1);
     
+    tilt = tiltSlider.v*PI;
     rotateX(xAngle + tilt);
     rotateY(yAngle);
     
@@ -220,16 +233,22 @@ function draw() {
 }
 
 function mousePressed() {
+    if (mouseX > width/3) {
   mousePressLoc.x = mouseX;
   mousePressLoc.y = mouseY;
+    }
 }
 
 function mouseDragged() {
+    if (mouseX > width/3) {
      yAngle = lastYAngle + (mouseX - mousePressLoc.x)/255;
      xAngle = lastXAngle - (mouseY - mousePressLoc.y)/255;
+    }
 }
 
 function mouseReleased() {
+    if (mouseX > width/3) {
   lastYAngle = yAngle;
   lastXAngle = xAngle;
+    }
 }
