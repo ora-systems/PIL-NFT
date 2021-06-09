@@ -12,5 +12,4 @@ if browser doesn't launch, right click > open with > browser
 
 ## TODO
 
-implement HALO in JS
-implement GUI control panel in JS 
+implement GUI control panel and data flows in JS\
