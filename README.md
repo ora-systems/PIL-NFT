@@ -1,6 +1,6 @@
 # PIL-NFT
 
-P5.js implementation of interactive motion graphic - PIL object
+P5.js implementation of interactive motion graphic - PIL object + HALO
 
 ## Download and Test
 
