@@ -8,7 +8,7 @@ function setup() {
 
 var time = 0.0, radius = 125.0;
 
-var mousePressLoc;
+var mousePressLoc = [];
 var lastYAngle = 0.0, lastXAngle = 0.0, yAngle = 0.0, xAngle = 0.0;
 
 var colorA = [], colorB = [];
@@ -39,32 +39,6 @@ function draw() {
     
     
     translate(center.x, center.y);
-    /*HALO
-    */
-    
-    
-  for (var i = 0; i < 1.0; i += 1.0/ringCount) {
-    var iSmoothStep = 3*i*i - 2*i*i*i;
-    stroke(colorA.x*i + colorB.x*(1.0-i), colorA.y*i + colorB.y*(1.0-i), colorA.z*i + colorB.z*(1.0-i), 255);
-    if (floor((i-waveOffset) * ringCount) % (ringCount/waveCount) == 0) {
-      strokeWeight(4);
-    stroke(colorA.x*i + colorB.x*(1.0-i) + 255*(1-i), colorA.y*i + colorB.y*(1.0-i) + 255*(1-i), colorA.z*i + colorB.z*(1.0-i) + 255*(1-i), 255);
-    }
-    beginShape();
-    for (var t = 0; t < 1.05; t += 0.01) {
-      var xNoiseA = complexity*i*500*(noise(3 + time + 5*cos(t*PI*2), 3 + time + 5*sin(t*PI*2), i*1-time)-0.5);
-      var yNoiseA = complexity*i*500*(noise(3 + time + 6*cos(t*PI*2), 3 + time + 6*sin(t*PI*2), i*1-time)-0.5);
-      var zNoiseA = complexity*i*300*(noise(3 + time + 5*cos(t*PI*2), 3 + time + 5*sin(t*PI*2), i*5-time)-0.5);
-      var zNoiseB = wobble*i*2000*(noise(3 + time + 0.25*cos(t*PI*2), 3 + time + 0.25*sin(t*PI*2), i*1+time/5)-0.5);
-      vertex(10 + (radius*1.7 + iSmoothStep*150 + xNoiseA)*cos(t*PI*2), (radius*1.7 + iSmoothStep*150 + yNoiseA)*sin(t*PI*2), zNoiseA + zNoiseB);
-    }
-    endShape();
-    strokeWeight(2);
-    
-  }
-    
-    waveOffset += 0.02;
-    if (waveOffset > 1.0) waveOffset--;
     
     
   /* PIL Object
@@ -187,9 +161,55 @@ function draw() {
   }
   endShape();
 
-    translate(-center.x, -center.y);
+    
+    rotateX(xAngle);
+    rotateY(yAngle);
+    /*HALO
+    */
+    
+    
+  for (var i = 0; i < 1.0; i += 1.0/ringCount) {
+    var iSmoothStep = 3*i*i - 2*i*i*i;
+    stroke(colorA.x*i + colorB.x*(1.0-i), colorA.y*i + colorB.y*(1.0-i), colorA.z*i + colorB.z*(1.0-i), 255);
+    if (floor((i-waveOffset) * ringCount) % (ringCount/waveCount) == 0) {
+      strokeWeight(4);
+    stroke(colorA.x*i + colorB.x*(1.0-i) + 255*(1-i), colorA.y*i + colorB.y*(1.0-i) + 255*(1-i), colorA.z*i + colorB.z*(1.0-i) + 255*(1-i), 255);
+    }
+    beginShape();
+    for (var t = 0; t < 1.05; t += 0.01) {
+      var xNoiseA = complexity*i*500*(noise(3 + time + 5*cos(t*PI*2), 3 + time + 5*sin(t*PI*2), i*1-time)-0.5);
+      var yNoiseA = complexity*i*500*(noise(3 + time + 6*cos(t*PI*2), 3 + time + 6*sin(t*PI*2), i*1-time)-0.5);
+      var zNoiseA = complexity*i*300*(noise(3 + time + 5*cos(t*PI*2), 3 + time + 5*sin(t*PI*2), i*5-time)-0.5);
+      var zNoiseB = wobble*i*2000*(noise(3 + time + 0.25*cos(t*PI*2), 3 + time + 0.25*sin(t*PI*2), i*1+time/5)-0.5);
+      vertex(10 + (radius*1.7 + iSmoothStep*150 + xNoiseA)*cos(t*PI*2), (radius*1.7 + iSmoothStep*150 + yNoiseA)*sin(t*PI*2), zNoiseA + zNoiseB);
+    }
+    endShape();
+    strokeWeight(2);
+    
+  }
+    
+    waveOffset += 0.02;
+    if (waveOffset > 1.0) waveOffset--;
     
     //Draw FX
     
+    
+    translate(-center.x, -center.y);
+    
     time += 0.01;
+}
+
+function mousePressed() {
+  mousePressLoc.x = mouseX;
+  mousePressLoc.y = mouseY;
+}
+
+function mouseDragged() {
+     yAngle = lastYAngle + (mouseX - mousePressLoc.x)/255;
+     xAngle = lastXAngle - (mouseY - mousePressLoc.y)/255;
+}
+
+function mouseReleased() {
+  lastYAngle = yAngle;
+  lastXAngle = xAngle;
 }
