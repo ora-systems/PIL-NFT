@@ -238,7 +238,7 @@ function draw() {
     
   for (var i = 0; i < 1.0; i += 1.0/ringCount) {
     var iSmoothStep = 3*i*i - 2*i*i*i;
-    stroke(colorA.x*i*colorRatio + colorB.x*(1.0-i)*(1.0-colorRatio), colorA.y*i*colorRatio + colorB.y*(1.0-i)*(1.0-colorRatio), colorA.z*i*colorRatio + colorB.z*(1.0-i)*(1.0-colorRatio));
+    stroke(colorA.x*i*colorRatio*2 + colorB.x*(1.0-i)*(1.0-colorRatio)*2, colorA.y*i*colorRatio*2 + colorB.y*(1.0-i)*(1.0-colorRatio)*2, colorA.z*i*colorRatio*2 + colorB.z*(1.0-i)*(1.0-colorRatio)*2);
     if (floor((i-waveOffset) * ringCount) % floor(ringCount/waveCount) == 0) {
       strokeWeight(1 + 4*waveIntensity);
     stroke(colorA.x*i*colorRatio + colorB.x*(1.0-i)*(1.0-colorRatio) + 255*(1-i)*waveIntensity,
