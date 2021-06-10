@@ -22,8 +22,8 @@ function setup() {
     textFont('Helvetica');
     text("Ring Count", 50, 25);
     ringsSlider = new LineSlider(-width/2 + 50, -height/2 + 50, width/4, 25, 0, 0.25);
-    wavesSlider = new LineSlider(-width/2 + 50, -height/2 + 125, width/4, 25, 0, 0.25);
-    waveIntensitySlider = new LineSlider(-width/2 + 50, -height/2 + 200, width/4, 25, 0, 0.25);
+    wavesSlider = new LineSlider(-width/2 + 50, -height/2 + 125, width/4, 25, 0, 0.5);
+    waveIntensitySlider = new LineSlider(-width/2 + 50, -height/2 + 200, width/4, 25, 0, 0.5);
     tiltSlider = new LineSlider(-width/2 + 50, -height/2 + 275, width/4, 25, 0, 0);
     rotationSlider = new LineSlider(-width/2 + 50, -height/2 + 350, width/4, 25, 0, 0.5);
     wobbleSlider = new LineSlider(-width/2 + 50, -height/2 + 425, width/4, 25, 0, 0.25);
@@ -42,7 +42,7 @@ var tilt = 0.0, rotation = 0.0, rotationSpeed = 0.01, wobble = 0.25, complexity 
 var waveOffset = 0.0;
 var ringCount = 35, waveCount = 3;
 function draw() {
-    background(15);
+    background(0);
     colorA.x = 255;
     colorA.y = 50;
     colorA.z = 100;
