@@ -2,13 +2,33 @@ var width = 1400, height = 800;
 var center = [];
 
 var tiltSlider;
+var rotationSlider;
+var wobbleSlider;
+var complexitySlider;
+var colorSlider;
+var colorRatioSlider;
+var ringsSlider;
+var wavesSlider;
+var waveIntensitySlider;
+var waveColorSlider;
+
 
 function setup() {
     createCanvas(1400, 800, WEBGL);
     center.x = width/6;
     center.y = 0;
     
-    tiltSlider = new LineSlider(-width/2 + 50, -height/2 + 50, width/4, 25, 0, 0.25);
+    var menuFont = loadFont("Helvetica");
+    textFont('Helvetica');
+    text("Ring Count", 50, 25);
+    ringsSlider = new LineSlider(-width/2 + 50, -height/2 + 50, width/4, 25, 0, 0.25);
+    wavesSlider = new LineSlider(-width/2 + 50, -height/2 + 125, width/4, 25, 0, 0.25);
+    waveIntensitySlider = new LineSlider(-width/2 + 50, -height/2 + 200, width/4, 25, 0, 0.25);
+    tiltSlider = new LineSlider(-width/2 + 50, -height/2 + 275, width/4, 25, 0, 0);
+    rotationSlider = new LineSlider(-width/2 + 50, -height/2 + 350, width/4, 25, 0, 0.5);
+    wobbleSlider = new LineSlider(-width/2 + 50, -height/2 + 425, width/4, 25, 0, 0.25);
+    complexitySlider = new LineSlider(-width/2 + 50, -height/2 + 500, width/4, 25, 0, 0.25);
+    colorRatioSlider = new LineSlider(-width/2 + 50, -height/2 + 575, width/4, 25, 0, 0.25);
 }
 
 var time = 0.0, radius = 125.0;
@@ -20,7 +40,7 @@ var colorA = [], colorB = [];
 var tilt = 0.0, rotation = 0.0, rotationSpeed = 0.01, wobble = 0.25, complexity = 0.5, colorRatio = 0.5, waveIntensity = 0.5;
 
 var waveOffset = 0.0;
-var ringCount = 75, waveCount = 3;
+var ringCount = 35, waveCount = 3;
 function draw() {
     background(15);
     colorA.x = 255;
@@ -42,6 +62,15 @@ function draw() {
     line(-width/6, -height/2, -width/6, height/2);
     
     tiltSlider.update();
+    rotationSlider.update();
+    wobbleSlider.update();
+    complexitySlider.update();
+    colorRatioSlider.update();
+    ringsSlider.update();
+    wavesSlider.update();
+    waveIntensitySlider.update();
+    
+    
     
     
     
@@ -194,19 +223,30 @@ function draw() {
     
     strokeWeight(1);
     
+    ringCount = floor(ringsSlider.v*100);
+    waveCount = floor(wavesSlider.v*10);
+    waveIntensity = waveIntensitySlider.v;
     tilt = tiltSlider.v*PI;
+    rotationSpeed = (rotationSlider.v - 0.5)*0.25;
+    wobble = wobbleSlider.v;
+    complexity = complexitySlider.v;
+    colorRatio = colorRatioSlider.v;
+    
+    
     rotateX(xAngle + tilt);
     rotateY(yAngle);
     
   for (var i = 0; i < 1.0; i += 1.0/ringCount) {
     var iSmoothStep = 3*i*i - 2*i*i*i;
-    stroke(colorA.x*i + colorB.x*(1.0-i), colorA.y*i + colorB.y*(1.0-i), colorA.z*i + colorB.z*(1.0-i));
+    stroke(colorA.x*i*colorRatio + colorB.x*(1.0-i)*(1.0-colorRatio), colorA.y*i*colorRatio + colorB.y*(1.0-i)*(1.0-colorRatio), colorA.z*i*colorRatio + colorB.z*(1.0-i)*(1.0-colorRatio));
     if (floor((i-waveOffset) * ringCount) % floor(ringCount/waveCount) == 0) {
       strokeWeight(1 + 4*waveIntensity);
-    stroke(colorA.x*i + colorB.x*(1.0-i) + 255*(1-i)*waveIntensity, colorA.y*i + colorB.y*(1.0-i) + 255*(1-i)*waveIntensity, colorA.z*i + colorB.z*(1.0-i) + 255*(1-i)*waveIntensity);
+    stroke(colorA.x*i*colorRatio + colorB.x*(1.0-i)*(1.0-colorRatio) + 255*(1-i)*waveIntensity,
+           colorA.y*i*colorRatio + colorB.y*(1.0-i)*(1.0-colorRatio) + 255*(1-i)*waveIntensity,
+           colorA.z*i*colorRatio + colorB.z*(1.0-i)*(1.0-colorRatio) + 255*(1-i)*waveIntensity);
     }
     beginShape();
-    for (var t = 0; t < 1.05; t += 0.01) {
+    for (var t = 0; t < 1.05; t += 0.005) {
       var xNoiseA = complexity*i*500*(noise(3 + time + 5*cos(t*PI*2), 3 + time + 5*sin(t*PI*2), i*1-time)-0.5);
       var yNoiseA = complexity*i*500*(noise(3 + time + 6*cos(t*PI*2), 3 + time + 6*sin(t*PI*2), i*1-time)-0.5);
       var zNoiseA = complexity*i*300*(noise(3 + time + 5*cos(t*PI*2), 3 + time + 5*sin(t*PI*2), i*5-time)-0.5);

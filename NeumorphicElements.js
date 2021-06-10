@@ -25,10 +25,8 @@ class LineSlider {
         circle(valuePos.x, valuePos.y, this.h-4);
         
         
-        console.log("mouse " + mouseX);
-        console.log("value " + (valuePos.x + 700));
         
-        if (mouseIsPressed && abs(valuePos.y + 400 - mouseY) < this.h) {
+        if (mouseIsPressed && abs(valuePos.y + 400 - mouseY) < this.h && abs((this.x + this.w/2 + 700) - mouseX) < this.w/2) {
             this.v = (mouseX - this.x - 700)/this.w;
             if (this.v < 0) this.v = 0;
             if (this.v > 1) this.v = 1;
