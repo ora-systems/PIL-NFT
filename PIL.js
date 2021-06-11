@@ -12,30 +12,51 @@ var ringsSlider;
 var wavesSlider;
 var waveIntensitySlider;
 var waveColorSlider;
-
-let menuFont;
+var pilRotationSlider;
 
 function preload() {
-    //menuFont = loadFont("./font.ttf");
 }
 
 function setup() {
-    createCanvas(1400, 800, WEBGL);
+    var htmlCanvas = document.getElementById("htmlCanvas");
+    var htmlContext = htmlCanvas.getContext("2d");
+    htmlCanvas.height = 800;
+    
+    var canvas1 = createCanvas(1400, 800, WEBGL);
     center.x = width/6;
     center.y = 0;
+    var p5Canvas = canvas1.canvas;
     
-    //textFont(menuFont);
+    
+    htmlContext.drawImage(p5Canvas, 0, 0);
+    htmlContext.fillStyle = "rgba(255, 255, 255, 1.0)";
+    htmlContext.font = "16px Arial";
+    htmlContext.textAlign = "right";
+    
     sizeSlider = new LineSlider(-width/2 + 150, -height/2 + 25, width/6, 25, 0, 0.75);
-    colorSlider = new HSBSlider(-width/2 + 150, -height/2 + 100, width/6, 25, 0, 0.75);
-    rotationSlider = new LineSlider(-width/2 + 150, -height/2 + 170, width/6, 25, 0, 0.5);
-    wobbleSlider = new LineSlider(-width/2 + 150, -height/2 + 250, width/6, 25, 0, 0.25);
-    complexitySlider = new LineSlider(-width/2 + 150, -height/2 + 325, width/6, 25, 0, 0.25);
-    centerColorSlider = new HSBSlider(-width/2 + 150, -height/2 + 400, width/6, 25, 0, 0.75);
-    colorRatioSlider = new LineSlider(-width/2 + 150, -height/2 + 475, width/6, 25, 0, 0.1);
-    ringsSlider = new LineSlider(-width/2 + 150, -height/2 + 550, width/6, 25, 0, 0.25);
-    wavesSlider = new LineSlider(-width/2 + 150, -height/2 + 625, width/6, 25, 0, 0.5);
-    waveIntensitySlider = new LineSlider(-width/2 + 150, -height/2 + 700, width/6, 25, 0, 0.5);
-    waveColorSlider = new HSBSlider(-width/2 + 150, -height/2 + 775, width/6, 25, 0, 0.75);
+    htmlContext.fillText("Size", 125, 40, 100, 25);
+    colorSlider = new HSBSlider(-width/2 + 150, -height/2 + 85, width/6, 25, 0, 0.75);
+    htmlContext.fillText("Main Color", 125, 100, 100, 25);
+    rotationSlider = new LineSlider(-width/2 + 150, -height/2 + 145, width/6, 25, 0, 0.5);
+    htmlContext.fillText("Rotation", 125, 160, 100, 25);
+    wobbleSlider = new LineSlider(-width/2 + 150, -height/2 + 205, width/6, 25, 0, 0.25);
+    htmlContext.fillText("Wobble", 125, 220, 100, 25);
+    complexitySlider = new LineSlider(-width/2 + 150, -height/2 + 265, width/6, 25, 0, 0.25);
+    htmlContext.fillText("Complexity", 125, 280, 100, 25);
+    centerColorSlider = new HSBSlider(-width/2 + 150, -height/2 + 325, width/6, 25, 0, 0.75);
+    htmlContext.fillText("Center Color", 125, 340, 100, 25);
+    colorRatioSlider = new LineSlider(-width/2 + 150, -height/2 + 385, width/6, 25, 0, 0.1);
+    htmlContext.fillText("Color Ratio", 125, 400, 100, 25);
+    ringsSlider = new LineSlider(-width/2 + 150, -height/2 + 445, width/6, 25, 0, 0.25);
+    htmlContext.fillText("Rings", 125, 460, 100, 25);
+    wavesSlider = new LineSlider(-width/2 + 150, -height/2 + 505, width/6, 25, 0, 0.5);
+    htmlContext.fillText("Waves", 125, 520, 100, 25);
+    waveIntensitySlider = new LineSlider(-width/2 + 150, -height/2 + 565, width/6, 25, 0, 0.5);
+    htmlContext.fillText("Wave Intensity", 125, 580, 100, 25);
+    waveColorSlider = new HSBSlider(-width/2 + 150, -height/2 + 625, width/6, 25, 0, 0.75);
+    htmlContext.fillText("Wave Color", 125, 640, 100, 25);
+    pilRotationSlider = new LineSlider(-width/2 + 150, -height/2 + 745, width/6, 25, 0, 0);
+    htmlContext.fillText("PIL Rotation", 125, 760, 100, 25);
 }
 
 var time = 0.0, radius = 125.0;
@@ -43,13 +64,15 @@ var time = 0.0, radius = 125.0;
 var mousePressLoc = [];
 var lastYAngle = 0.0, lastXAngle = 0.0, yAngle = 0.0, xAngle = 0.0;
 
+var pilAngle = 0.0;
+
 var centerColor = [], mainColor = [], waveColor = [];
 var size = 0.85, rotation = 0.0, rotationSpeed = 0.01, wobble = 0.25, complexity = 0.5, colorRatio = 0.5, waveIntensity = 0.5;
 
 var waveOffset = 0.0;
 var ringCount = 35, waveCount = 3;
 function draw() {
-    background(0);
+    background(0, 0, 0, 0);
     
     
     
@@ -57,9 +80,6 @@ function draw() {
     /*GUI
     */
     
-    textSize(32);
-    fill(255);
-    text("TEXT", 25, 25);
     
     colorMode(HSB);
     
@@ -78,7 +98,7 @@ function draw() {
     wavesSlider.update();
     waveIntensitySlider.update();
     waveColorSlider.update();
-
+    pilRotationSlider.update();
     
     translate(center.x, center.y, -200);
     
@@ -87,12 +107,14 @@ function draw() {
   Each curve (Peace (4 lines), Heart, Infinity) is parameterized with a single variable 0 < t < 1
   */
     
+    pilAngle = pilRotationSlider.v*PI;
+    
     colorMode(RGB);
     
     noFill();
     stroke(255);
     strokeWeight(1);
-    rotateY(time);
+    rotateY(pilAngle);
     
     /*PEACE*/
     
@@ -105,9 +127,9 @@ function draw() {
       var y = t*1.2*radius;
     
       translate(0,y,0);
-      rotateY(-time);
+      rotateY(-pilAngle);
       circle(0, 0, 15);
-      rotateY(time);
+      rotateY(pilAngle);
       translate(0,-y,0);
   } 
     
@@ -117,9 +139,9 @@ function draw() {
       var y = -t*1.2*radius;
     
       translate(0,y,0);
-      rotateY(-time);
+      rotateY(-pilAngle);
       circle(0, 0, 15);
-      rotateY(time);
+      rotateY(pilAngle);
       translate(0,-y,0);
   } 
     
@@ -129,9 +151,9 @@ function draw() {
       var x = t*1.25*radius*cos(PI/4), y = 25 + t*1.2*radius*sin(PI/4);
     
       translate(x,y,z);
-      rotateY(-time);
+      rotateY(-pilAngle);
       circle(0, 0, 15);
-      rotateY(time);
+      rotateY(pilAngle);
       translate(-x,-y,-z);
   } 
     
@@ -141,9 +163,9 @@ function draw() {
       var x = -t*1.25*radius*cos(PI/4), y = 25 + t*1.2*radius*sin(PI/4);
     
       translate(x,y,z);
-      rotateY(-time);
+      rotateY(-pilAngle);
       circle(0, 0, 15);
-      rotateY(time);
+      rotateY(pilAngle);
       translate(-x,-y,-z);
   } 
     
@@ -162,9 +184,9 @@ function draw() {
       var x = radius*1.3*cos(t*PI*2), y = radius*1.3*sin(t*PI*2);
     
       translate(x,y,z);
-      rotateY(-time);
+      rotateY(-pilAngle);
       circle(0, 0, 25);
-      rotateY(time);
+      rotateY(pilAngle);
       translate(-x,-y,-z);
   } 
     
@@ -188,9 +210,9 @@ function draw() {
       var x = radius*0.725*pow(sin(t*2*PI),3), y = -5 - radius*1.1*(13*cos(t*2*PI) - 5*cos(4*t*PI) - 2*cos(6*t*PI) - cos(8*t*PI))/16, z = 25*cos(t*PI*6)
      
       translate(x,y,z);
-      rotateY(-time);
+      rotateY(-pilAngle);
       circle(0, 0, 15);
-      rotateY(time);
+      rotateY(pilAngle);
       translate(-x,-y,-z);
      
   }
@@ -215,15 +237,15 @@ function draw() {
       var x = -2 + radius*0.7*sqrt(2)*cos(t*2*PI)/(pow(sin(t*2*PI),2)+1), y =  -7.5 - radius*0.6*sqrt(2)*cos(t*2*PI)*sin(t*2*PI)/(pow(sin(t*2*PI),2)+1), z = 10 + 25*cos(PI/2 + t*PI*6);
  
       translate(x,y,z);
-      rotateY(-time);
+      rotateY(-pilAngle);
       circle(0, 0, 15);
-      rotateY(time);
+      rotateY(pilAngle);
       translate(-x,-y,-z);
   }
   //endShape();
     
   rotateX(-0.1);
-    rotateY(-time);
+    rotateY(-pilAngle);
 
     
     /*HALO
@@ -274,7 +296,7 @@ function draw() {
     for (var t = 0; t < 1.05; t += 0.005) {
       var rNoise = complexity*i*300*(noise(3 + time + 15*cos(t*PI*2), 3 + time + 15*sin(t*PI*2), i*1-time));
       var zNoiseA = complexity*i*300*(noise(3 + time + 15*cos(t*PI*2), 3 + time + 15*sin(t*PI*2), i*5-time)-0.5);
-      var zNoiseB = wobble*i*1000*(noise(3 + time + 0.25*cos(t*PI*2), 3 + time + 0.25*sin(t*PI*2), i*1+time/5)-0.5);
+      var zNoiseB = wobble*i*2000*(noise(3 + time + 0.25*cos(t*PI*2), 3 + time + 0.25*sin(t*PI*2), i*1+time/5)-0.5);
       vertex(0 + (radius*1.7 + iSmoothStep*200*size - rNoise)*cos(t*PI*2 + rotation), (radius*1.7 + iSmoothStep*200*size - rNoise)*sin(t*PI*2 + rotation), zNoiseA + zNoiseB);
     }
     endShape();
