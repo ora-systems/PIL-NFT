@@ -13,3 +13,10 @@ if browser doesn't launch, right click > open with > browser
 ## TODO
 
 
+Neumorphic Elements :\
+	implement color circles\
+	implement selection bar\
+	make sliders more user-friendly\
+
+PIL + HALO :\
+	update GUI
