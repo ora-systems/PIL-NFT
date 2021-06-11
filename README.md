@@ -12,4 +12,4 @@ if browser doesn't launch, right click > open with > browser
 
 ## TODO
 
-correct halo rotation when PIL is rotating
+
