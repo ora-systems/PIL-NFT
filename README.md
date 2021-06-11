@@ -12,4 +12,4 @@ if browser doesn't launch, right click > open with > browser
 
 ## TODO
 
-implement GUI control panel and data flows in JS\
+correct halo rotation when PIL is rotating
