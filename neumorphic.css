@@ -1,0 +1,174 @@
+p {
+    width:35%;
+    margin-top: 5px;
+    color:#777;
+    font-family:"Roboto";
+    font-size:14px;
+
+}
+
+.controls{
+    display: block;
+    float: left;
+    width: 330px;
+    height: 1000px;
+    background:linear-gradient(to right, #222, #000);
+}
+
+.slider_control{
+    display: flex;
+    width: 90%;
+    margin-top: 10px;
+    text-align: right;
+}
+
+
+
+
+.slider {
+    -webkit-appearance: none;
+    float: right;
+    width: 65%;
+    height: 25px;
+    margin-left: 15px;
+    background: radial-gradient(#333, #222);
+    filter: drop-shadow(3px 3px 5px black) blur(1.5px);
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity .3s;
+}
+.slider:hover {
+    opacity: 1;
+    filter: drop-shadow(3px 3px 5px black) blur(1px);
+}         
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 10px;
+    background: #000;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 30px;
+    height: 10px;
+    background: #000;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+
+
+
+
+.color_slider {
+    -webkit-appearance: none;
+    float: right;
+    margin-left: 15px;
+    width: 65%;
+    height: 25px;
+    background: linear-gradient(to right, yellow, red, blue);
+    filter: drop-shadow(3px 3px 5px black) blur(2px);
+    outline: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity:0.5;
+    transition: opacity .3s;
+}
+.color_slider:hover {
+    opacity: 1;
+    filter: drop-shadow(3px 3px 5px black) blur(1px);
+}
+            
+.color_slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 10px;
+    background: #000;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.color_slider::-moz-range-thumb {
+    width: 30px;
+    height: 10px;
+    background: #000;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+
+
+.seg_slider_text {
+    position:absolute;
+    width:600px;
+    margin-left:120px;
+    margin-top: -10px;
+}
+
+.seg_slider {
+    -webkit-appearance: none;
+    position:relative;
+    width: 65%;
+    height: 25px;
+    margin-left: 15px;
+    background: radial-gradient(#333, #222);
+    filter: drop-shadow(3px 3px 5px black) blur(2px);
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity:0.5;
+    transition: opacity .3s;
+}
+.seg_slider:hover {
+    opacity: 1;
+    filter: drop-shadow(3px 3px 5px black) blur(1px);
+}
+            
+.seg_slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 33%;
+    height: 20px;
+    background: #000;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.seg_slider::-moz-range-thumb {
+    width: 33%;
+    height: 20px;
+    background: #000;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+
+.color_wheel {
+    position:absolute;
+    width:185px;
+    height:185px;
+    background-image: url("colorWheel.jpeg");
+    background-size:185px;
+    filter: drop-shadow(3px 3px 5px black) blur(2px);
+    border-radius: 15px;
+    margin-left:115px;
+    margin-top:25px;
+    opacity:0.5;
+    transition: opacity .3s;
+}
+.color_wheel:hover {
+    opacity: 1;
+    filter: drop-shadow(3px 3px 5px black) blur(1px);
+}
