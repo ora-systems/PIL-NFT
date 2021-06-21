@@ -93,9 +93,9 @@ function draw() {
     wobble = wobbleSlider.value/100.0;
     complexity = 0.25 + complexitySlider.value/100.0;
     //centerColor.hue = 125;//centerColorSlider.value/100.0*255;
-    colorRatio = colorRatioSlider.value/100.0;
+    colorRatio = sqrt(colorRatioSlider.value/100.0);
     ringCount = ringsSlider.value;
-    waveCount = floor(wavesSlider.value/10.0);
+    waveCount = floor(wavesSlider.value/20.0);
     waveIntensity = waveIntensitySlider.value/100.0;
     //waveColor.hue = waveColorSlider.value/100.0*255;
     speed = speedSlider.value/1000.0 + 0.05;
@@ -118,17 +118,23 @@ function draw() {
     if (mouseDown) {
     if (colorToggle == 0) {
         centerColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
-        centerColor.saturation = (mag/colorWheelRadius-0.25)*255;
+        centerColor.saturation = (mag/colorWheelRadius)*255;
     } else if (colorToggle == 1) {
         mainColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
-        mainColor.saturation = (mag/colorWheelRadius-0.25)*255;
+        mainColor.saturation = (mag/colorWheelRadius)*255;
     } else if (colorToggle == 2) {
         waveColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
-        waveColor.saturation = (mag/colorWheelRadius-0.25)*255;
+        waveColor.saturation = (mag/colorWheelRadius)*255;
     }
     }
+
+    var centerColorDot = document.getElementById("centerColorDot");
+    var mainColorDot = document.getElementById("mainColorDot");
+    var waveColorDot = document.getElementById("waveColorDot");
+    centerColorDot.style.fill = 'hsl(' + centerColor.hue + ', 100%, ' + ((1.0-centerColor.saturation/255)*50+50) + '%)';
+    mainColorDot.style.fill = 'hsl(' + mainColor.hue + ', 100%, ' + ((1.0-mainColor.saturation/255)*50+50) + '%)';
+    waveColorDot.style.fill = 'hsl(' + waveColor.hue + ', 100%, ' + ((1.0-waveColor.saturation/255)*50+50) + '%)';
     
-    console.log(mainColor.hue);
     
     
     /* sample color
@@ -213,10 +219,10 @@ function draw() {
       }
       
       beginShape();
-      for (var t = 0; t < 1.02; t += 0.02) {
-          var rNoise = complexity*i*200*(noise(3 + time + 5*complexity*cos(t*PI*2), 3 + time + 5*complexity*sin(t*PI*2), i*2-time)-0.5);
-          var xNoise = complexity*i*300*(noise(25 + time + 15*cos(t*PI*2), 25 + time + 15*sin(t*PI*2), i*1-time)-0.5);
-          var yNoise = complexity*i*300*(noise(15 + time + 15*cos(t*PI*2), 15 + time + 15*sin(t*PI*2), i*1-time)-0.5);
+      for (var t = 0; t < 1.02; t += 0.01) {
+          var rNoise = complexity*i*300*(noise(3 + time - 3*i + 15*complexity*cos(t*PI*2), 3 + time - 3*i + 15*complexity*sin(t*PI*2), i*5*complexity)-0.5);
+          var xNoise = complexity*i*50*(noise(25 + time + 15*cos(t*PI*2), 25 + time + 15*sin(t*PI*2), i*1-time)-0.5);
+          var yNoise = complexity*i*50*(noise(15 + time + 15*cos(t*PI*2), 15 + time + 15*sin(t*PI*2), i*1-time)-0.5);
           var zNoiseA = complexity*i*800*(noise(3 + time + 15*cos(t*PI*2), 3 + time + 15*sin(t*PI*2), i*1-time)-0.5);
           var xWobble = wobble*i*300*(noise(3 + time + 0.5*cos(t*PI*2), 3 + time + 0.5*sin(t*PI*2), i*1+time/5)-0.5);
           var yWobble = wobble*i*300*(noise(3 + time + 0.5*cos(t*PI*2), 3 + time + 0.5*sin(t*PI*2), i*1+time/5)-0.5);
@@ -234,6 +240,23 @@ function draw() {
     translate(-center.x, -center.y, 200);
     
     mouseDown = false;
+}
+
+function hsv_to_hsl(h, s, v) {
+    // both hsv and hsl values are in [0, 1]
+    var l = (2 - s) * v / 2;
+
+    if (l != 0) {
+        if (l == 1) {
+            s = 0
+        } else if (l < 0.5) {
+            s = s * v / (l * 2)
+        } else {
+            s = s * v / (2 - l * 2)
+        }
+    }
+
+    return [h, s, l]
 }
 
 function drawPIL_0() {
@@ -383,7 +406,7 @@ function drawPIL_1() {
   
   for (var t = 0; t < 1.05; t += 0.025) {
       //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
-          fill(0, 155 - 100*(1+sin((t-time/4)*PI*2)), 255 - 55*(1+sin((t-time/4)*PI*2)), 255);
+          fill(0, 155 - 100*(1+sin((t-time/12)*PI*2)), 255 - 55*(1+sin((t-time/12)*PI*2)), 255);
       var y = t*1.2*radius;
     
       translate(0,y,0);
@@ -393,7 +416,7 @@ function drawPIL_1() {
     
   for (var t = 0; t < 1.05; t += 0.025) {
       //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
-          fill(0, 155 - 100*(1+sin((t-time/4)*PI*2)), 255 - 55*(1+sin((t-time/4)*PI*2)), 255);
+          fill(0, 155 - 100*(1+sin((t-time/12)*PI*2)), 255 - 55*(1+sin((t-time/12)*PI*2)), 255);
       var y = -t*1.2*radius;
     
       translate(0,y,0);
@@ -403,7 +426,7 @@ function drawPIL_1() {
     
   for (var t = 0; t < 1.0; t += 0.025) {
       //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
-          fill(0, 155 - 100*(1+sin((t-time/4)*PI*2)), 255 - 55*(1+sin((t-time/4)*PI*2)), 255);
+          fill(0, 155 - 100*(1+sin((t-time/12)*PI*2)), 255 - 55*(1+sin((t-time/12)*PI*2)), 255);
       var x = t*1.2*radius*cos(PI/4), y = 25 + t*1.2*radius*sin(PI/4);
     
       translate(x,y,z);
@@ -413,7 +436,7 @@ function drawPIL_1() {
     
   for (var t = 0; t < 1.0; t += 0.025) {
       //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
-          fill(0, 155 - 100*(1+sin((t-time/4)*PI*2)), 255 - 55*(1+sin((t-time/4)*PI*2)), 255);
+          fill(0, 155 - 100*(1+sin((t-time/12)*PI*2)), 255 - 55*(1+sin((t-time/12)*PI*2)), 255);
       
       var x = -t*1.2*radius*cos(PI/4), y = 25 + t*1.2*radius*sin(PI/4);
     
@@ -459,7 +482,7 @@ function drawPIL_1() {
           t -= 0.00125;
           
       }*/
-          fill(255, 64*(1+sin((t+time/4)*PI*6)), 64*(1+sin((t+time/4)*PI*6)), 255);
+          fill(255, 64*(1+sin((t+time/12)*PI*6)), 64*(1+sin((t+time/12)*PI*6)), 255);
       
       var x = radius*0.725*pow(sin(t*2*PI),3), y = -5 - radius*1.1*(13*cos(t*2*PI) - 5*cos(4*t*PI) - 2*cos(6*t*PI) - cos(8*t*PI))/16, z = 25*cos(t*PI*6)
      
@@ -485,7 +508,7 @@ function drawPIL_1() {
           t -= 0.00125;
           
       }*/
-        fill(255, 127 + 64*(1+sin((t-time/4)*PI*6)), 0, 255);
+        fill(255, 127 + 64*(1+sin((t-time/12)*PI*6)), 0, 255);
       var x = -2 + radius*0.7*sqrt(2)*cos(t*2*PI)/(pow(sin(t*2*PI),2)+1), y =  -7.5 - radius*0.6*sqrt(2)*cos(t*2*PI)*sin(t*2*PI)/(pow(sin(t*2*PI),2)+1), z = 10 + 25*cos(PI/2 + t*PI*6);
  
       translate(x,y,z);

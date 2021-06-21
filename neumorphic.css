@@ -31,7 +31,7 @@ p {
     height: 25px;
     margin-left: 15px;
     background: #222;
-    box-shadow:  0px 0px 25px #333,
+    box-shadow:  0px 0px 15px #222,
                 inset 5px 5px 5px #000,
                 inset -5px -5px 15px #333;
     outline: none;
@@ -57,8 +57,8 @@ p {
 }
 
 .slider::-moz-range-thumb {
-    width: 30px;
-    height: 15px;
+    width: 10px;
+    height: 30px;
     background: linear-gradient(to right, #111, #222);
     box-shadow: 2px 2px 3px #000,
                 -2px -2px 3px #555;
@@ -125,9 +125,9 @@ p {
     position:absolute;
     width:185px;
     height:185px;
-    background-image: url("colorWheel.jpeg");
+    background-image: url("resources/colorWheelVibrant.jpeg");
     background-size:185px;
-    box-shadow:  0px 0px 55px #777,
+    box-shadow:  0px 0px 55px #555,
                 inset 5px 5px 35px #000,
                 inset -5px -5px 35px #FFF;
     
