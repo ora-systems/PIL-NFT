@@ -172,6 +172,8 @@ function draw() {
         drawPIL_1();
     } else if (option == 2) {
         drawPIL_2();
+    } else if (option == 3) {
+        drawPIL_3();
     } else {
         drawPIL_0();
     }
@@ -372,6 +374,8 @@ function drawPIL_0() {
 function drawPIL_1() {
     rotateY(pilAngle);
     
+    directionalLight(255, 255, 255,0,1,-1);
+    directionalLight(255, 255, 255,0,0,-5);
     /*PEACE*/
     
     
@@ -383,9 +387,7 @@ function drawPIL_1() {
       var y = t*1.2*radius;
     
       translate(0,y,0);
-      rotateY(-pilAngle);
-      circle(0, 0, 15);
-      rotateY(pilAngle);
+      sphere(10);
       translate(0,-y,0);
   } 
     
@@ -395,9 +397,7 @@ function drawPIL_1() {
       var y = -t*1.2*radius;
     
       translate(0,y,0);
-      rotateY(-pilAngle);
-      circle(0, 0, 15);
-      rotateY(pilAngle);
+      sphere(10);
       translate(0,-y,0);
   } 
     
@@ -407,21 +407,18 @@ function drawPIL_1() {
       var x = t*1.2*radius*cos(PI/4), y = 25 + t*1.2*radius*sin(PI/4);
     
       translate(x,y,z);
-      rotateY(-pilAngle);
-      circle(0, 0, 15);
-      rotateY(pilAngle);
+      sphere(10);
       translate(-x,-y,-z);
   } 
     
   for (var t = 0; t < 1.0; t += 0.025) {
       //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
           fill(0, 155 - 100*(1+sin((t-time/4)*PI*2)), 255 - 55*(1+sin((t-time/4)*PI*2)), 255);
+      
       var x = -t*1.2*radius*cos(PI/4), y = 25 + t*1.2*radius*sin(PI/4);
     
       translate(x,y,z);
-      rotateY(-pilAngle);
-      circle(0, 0, 15);
-      rotateY(pilAngle);
+      sphere(10);
       translate(-x,-y,-z);
   } 
     
@@ -434,14 +431,16 @@ function drawPIL_1() {
           t -= 0.00125;
           
       }*/
-          fill(0, 155 - 100*(1+sin((t+time/4)*PI*6)), 255 - 55*(1+sin((t+time/4)*PI*6)), 255);
+      var n = noise(3 + time/3 + cos(t*PI*2), 3 + time/3 + sin(t*PI*2));
+          fill(255 - 255*(1+sin((t+time/4)*PI*6)), 255 - 55*(1+sin((t+time/4)*PI*6)), 255 - 25*(1+sin((t+time/4)*PI*6)), 255);
+      
+          fill(0, 155 - 200*n, 255 - 200*n, 255);
+        
       
       var x = radius*1.3*cos(t*PI*2), y = radius*1.3*sin(t*PI*2);
     
       translate(x,y,z);
-      rotateY(-pilAngle);
-      circle(0, 0, 25);
-      rotateY(pilAngle);
+      sphere(15);
       translate(-x,-y,-z);
   } 
     
@@ -450,7 +449,7 @@ function drawPIL_1() {
   rotateX(-0.15);
   noStroke();
   //beginShape();
-  for (var t = 0; t < 1.05; t += 0.001) {
+  for (var t = 0; t < 1.05; t += 0.0025) {
       
       /*/Gradient segments
       if (floor(t*1000) % 4 == 0) {
@@ -465,9 +464,7 @@ function drawPIL_1() {
       var x = radius*0.725*pow(sin(t*2*PI),3), y = -5 - radius*1.1*(13*cos(t*2*PI) - 5*cos(4*t*PI) - 2*cos(6*t*PI) - cos(8*t*PI))/16, z = 25*cos(t*PI*6)
      
       translate(x,y,z);
-      rotateY(-pilAngle);
-      circle(0, 0, 15);
-      rotateY(pilAngle);
+      sphere(10);
       translate(-x,-y,-z);
      
   }
@@ -478,7 +475,7 @@ function drawPIL_1() {
     /*INFINITY*/
     noStroke();
   //beginShape();
-  for (var t = 0; t < 1.05; t += 0.005) {
+  for (var t = 0; t < 1.05; t += 0.0025) {
       
       /*/Gradient segments
       if (floor(t*1000) % 4 == 0) {
@@ -492,9 +489,7 @@ function drawPIL_1() {
       var x = -2 + radius*0.7*sqrt(2)*cos(t*2*PI)/(pow(sin(t*2*PI),2)+1), y =  -7.5 - radius*0.6*sqrt(2)*cos(t*2*PI)*sin(t*2*PI)/(pow(sin(t*2*PI),2)+1), z = 10 + 25*cos(PI/2 + t*PI*6);
  
       translate(x,y,z);
-      rotateY(-pilAngle);
-      circle(0, 0, 15);
-      rotateY(pilAngle);
+      sphere(10);
       translate(-x,-y,-z);
   }
   //endShape();
@@ -637,6 +632,145 @@ function drawPIL_2() {
   rotateX(-0.1);
     rotateY(-pilAngle);
 }
+
+function drawPIL_3() {
+    rotateY(pilAngle);
+    
+    /*PEACE*/
+    
+    noStroke();
+  
+  for (var t = 0; t < 1.05; t += 0.025) {
+      //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
+          fill(0, 155 - 100*(1+sin(time*3)), 255 - 55*(1+sin(time*3)), 255);
+      var y = t*1.2*radius;
+    
+      translate(0,y,0);
+      rotateY(-pilAngle);
+      circle(0, 0, 15);
+      rotateY(pilAngle);
+      translate(0,-y,0);
+  } 
+    
+  for (var t = 0; t < 1.05; t += 0.025) {
+      //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
+          fill(0, 155 - 100*(1+sin(time*3)), 255 - 55*(1+sin(time*3)), 255);
+      var y = -t*1.2*radius;
+    
+      translate(0,y,0);
+      rotateY(-pilAngle);
+      circle(0, 0, 15);
+      rotateY(pilAngle);
+      translate(0,-y,0);
+  } 
+    
+  for (var t = 0; t < 1.0; t += 0.025) {
+      //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
+          fill(0, 155 - 100*(1+sin(time*3)), 255 - 55*(1+sin(time*3)), 255);
+      var x = t*1.25*radius*cos(PI/4), y = 25 + t*1.2*radius*sin(PI/4);
+    
+      translate(x,y,z);
+      rotateY(-pilAngle);
+      circle(0, 0, 15);
+      rotateY(pilAngle);
+      translate(-x,-y,-z);
+  } 
+    
+  for (var t = 0; t < 1.0; t += 0.025) {
+      //stroke(85 - 25*t, 155 - 100*t, 255 - 127*t, 255);
+          fill(0, 155 - 100*(1+sin(time*3)), 255 - 55*(1+sin(time*3)), 255);
+      var x = -t*1.25*radius*cos(PI/4), y = 25 + t*1.2*radius*sin(PI/4);
+    
+      translate(x,y,z);
+      rotateY(-pilAngle);
+      circle(0, 0, 15);
+      rotateY(pilAngle);
+      translate(-x,-y,-z);
+  } 
+    
+    
+    
+    fill(0, 155 - 100*(1+sin(time*3)), 255 - 55*(1+sin(time*3)), 255);
+    
+  for (var t = 0; t < 1.05; t += 0.0025) {
+      
+      /*/Gradient segments
+      if (floor(t*1000) % 4 == 0) {
+          endShape();
+          stroke(0, 155 - 100*(1+sin((t+time)*PI*6)), 255 - 55*(1+sin((t+time)*PI*6)), 255);
+          beginShape();
+          t -= 0.00125;
+          
+      }*/
+      
+      var x = radius*1.3*cos(t*PI*2), y = radius*1.3*sin(t*PI*2);
+    
+      translate(x,y,z);
+      rotateY(-pilAngle);
+      circle(0, 0, 25);
+      rotateY(pilAngle);
+      translate(-x,-y,-z);
+  } 
+    
+  
+  /*HEART*/
+  rotateX(-0.15);
+  noStroke();
+  //beginShape();
+  for (var t = 0; t < 1.05; t += 0.001) {
+      
+      /*/Gradient segments
+      if (floor(t*1000) % 4 == 0) {
+          endShape();
+          stroke(255, 64*(1+sin((t+time)*PI*6)), 64*(1+sin((t+time)*PI*6)), 255);
+          beginShape();
+          t -= 0.00125;
+          
+      }*/
+          fill(255, 64*(1+sin(time*4)), 64*(1+sin(time*4)), 255);
+      
+      var x = radius*0.725*pow(sin(t*2*PI),3), y = -5 - radius*1.1*(13*cos(t*2*PI) - 5*cos(4*t*PI) - 2*cos(6*t*PI) - cos(8*t*PI))/16, z = 25*cos(t*PI*6)
+     
+      translate(x,y,z);
+      rotateY(-pilAngle);
+      circle(0, 0, 15);
+      rotateY(pilAngle);
+      translate(-x,-y,-z);
+     
+  }
+  //endShape();
+  
+  rotateX(0.1);
+    
+    /*INFINITY*/
+    noStroke();
+  //beginShape();
+  for (var t = 0; t < 1.05; t += 0.005) {
+      
+      /*/Gradient segments
+      if (floor(t*1000) % 4 == 0) {
+          endShape();
+        stroke(255, 127 + 64*(1+sin((t-time)*PI*6)), 0, 255);
+          beginShape();
+          t -= 0.00125;
+          
+      }*/
+        fill(255, 127 + 64*(1+sin(time*5)), 0, 255);
+      var x = -2 + radius*0.7*sqrt(2)*cos(t*2*PI)/(pow(sin(t*2*PI),2)+1), y =  -7.5 - radius*0.6*sqrt(2)*cos(t*2*PI)*sin(t*2*PI)/(pow(sin(t*2*PI),2)+1), z = 10 + 25*cos(PI/2 + t*PI*6);
+ 
+      translate(x,y,z);
+      rotateY(-pilAngle);
+      circle(0, 0, 15);
+      rotateY(pilAngle);
+      translate(-x,-y,-z);
+  }
+  //endShape();
+    
+  rotateX(-0.1);
+    rotateY(-pilAngle);
+}
+
+
 
 function mousePressed() {
     if (mouseX > width/3) {
