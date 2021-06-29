@@ -88,16 +88,13 @@ function draw() {
     
     //vertices to be data-driven
     size = 0.5 + sizeSlider.value/100.0;
-    //mainColor.saturation = colorSlider.value/100.0*255;
     rotationSpeed = (rotationSlider.value/100.0 - 0.5)*0.25;
     wobble = wobbleSlider.value/100.0;
     complexity = 0.25 + complexitySlider.value/100.0;
-    //centerColor.hue = 125;//centerColorSlider.value/100.0*255;
-    colorRatio = sqrt(colorRatioSlider.value/100.0);
+    colorRatio = (colorRatioSlider.value/50.0)-1;
     ringCount = ringsSlider.value;
     waveCount = floor(wavesSlider.value/20.0);
     waveIntensity = waveIntensitySlider.value/100.0;
-    //waveColor.hue = waveColorSlider.value/100.0*255;
     speed = speedSlider.value/1000.0 + 0.05;
     colorToggle = colorSegments.value;
     pilAngle = yAngle;
@@ -106,41 +103,40 @@ function draw() {
     var list = document.getElementById("select1");
     var option = list.value;
     
-    //use mx and my to derive colors on color wheel
-    console.log("Mouse (" + mx + ", " + my + ")");
-    
-    //get color from color block
+
+    //calculate HSV color from mouse coords on color block
     var mag = sqrt(mx*mx+my*my);
     
-    
-    console.log(colorToggle);
-    
     if (mouseDown) {
-    if (colorToggle == 0) {
-        centerColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
-        centerColor.saturation = (mag/colorWheelRadius)*255;
-    } else if (colorToggle == 1) {
-        mainColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
-        mainColor.saturation = (mag/colorWheelRadius)*255;
-    } else if (colorToggle == 2) {
-        waveColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
-        waveColor.saturation = (mag/colorWheelRadius)*255;
-    }
+        if (colorToggle == 0) {
+            centerColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
+            centerColor.saturation = (mag/colorWheelRadius)*255;
+        } else if (colorToggle == 1) {
+            mainColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
+            mainColor.saturation = (mag/colorWheelRadius)*255;
+        } else if (colorToggle == 2) {
+            waveColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
+            waveColor.saturation = (mag/colorWheelRadius)*255;
+        }
     }
 
-    //HSV to RGB
+    //Calculate RGB from HSV
+
+    //Center Color
     var colorFromHSV = hsv_to_rgb(centerColor.hue, centerColor.saturation, 1.0);
-
+    
     centerColor.red = colorFromHSV.red;
     centerColor.green = colorFromHSV.green;
     centerColor.blue = colorFromHSV.blue;
 
+    //Main Color
     colorFromHSV = hsv_to_rgb(mainColor.hue, mainColor.saturation, 1.0);
 
     mainColor.red = colorFromHSV.red;
     mainColor.green = colorFromHSV.green;
     mainColor.blue = colorFromHSV.blue;
 
+    //Wave Color
     colorFromHSV = hsv_to_rgb(waveColor.hue, waveColor.saturation, 1.0);
 
     waveColor.red = colorFromHSV.red;
@@ -230,14 +226,17 @@ function draw() {
       //stroke(mainColor.saturation - (mainColor.saturation - centerColor.saturation)*(1-i)*colorRatio, 255, 255);
       //stroke(mainColor.hue - (mainColor.hue - centerColor.hue)*(1-i + colorRatio/2)*colorRatio, mainColor.saturation - (mainColor.saturation - centerColor.saturation)*(1-i + colorRatio/2)*colorRatio, 255);
       stroke(
-            mainColor.red*i*(1.0-colorRatio) + centerColor.red*(1-i)*colorRatio,
-            mainColor.green*i*(1.0-colorRatio) + centerColor.green*(1-i)*colorRatio,
-            mainColor.blue*i*(1.0-colorRatio) + centerColor.blue*(1-i)*colorRatio)
+            mainColor.red*(i-colorRatio) + centerColor.red*(1.0-i+colorRatio),
+            mainColor.green*(i-colorRatio) + centerColor.green*(1.0-i+colorRatio),
+            mainColor.blue*(i-colorRatio) + centerColor.blue*(1.0-i+colorRatio));
       
             //Wave ring case
       if (floor((i-waveOffset) * ringCount) % floor(ringCount/waveCount) == 0 && waveCount > 0) {
           strokeWeight(1 + 4*waveIntensity);
-          stroke(waveColor.hue - (waveColor.hue - mainColor.hue)*(1.0-waveIntensity), 255*(1-waveIntensity), 126);
+          stroke(
+            waveColor.red*(waveIntensity) + mainColor.red*(1.0-waveIntensity),
+            waveColor.green*(waveIntensity) + mainColor.green*(1.0-waveIntensity),
+            waveColor.blue*(waveIntensity) + mainColor.blue*(1.0-waveIntensity));
       }
       
       beginShape();
