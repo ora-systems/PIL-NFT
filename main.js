@@ -54,6 +54,20 @@ function setup() {
     waveColorSlider = document.getElementById("waveColor");
     speedSlider = document.getElementById("speed");
     colorSegments = document.getElementById("colorSeg");
+
+
+    //Set default colors
+    centerColor.red = 0;
+    centerColor.green = 55;
+    centerColor.blue = 255;
+
+    mainColor.red = 255;
+    mainColor.green = 0;
+    mainColor.blue = 55;
+
+    waveColor.red = 255;
+    waveColor.green = 255;
+    waveColor.blue = 255;
     
     //Canvas color block
     colorCanvas = document.getElementById("colorCanvas");
@@ -93,7 +107,7 @@ function draw() {
     complexity = 0.25 + complexitySlider.value/100.0;
     colorRatio = (colorRatioSlider.value/50.0)-1;
     ringCount = ringsSlider.value;
-    waveCount = floor(wavesSlider.value/20.0);
+    waveCount = floor(wavesSlider.value);
     waveIntensity = waveIntensitySlider.value/100.0;
     speed = speedSlider.value/1000.0 + 0.05;
     colorToggle = colorSegments.value;
@@ -104,44 +118,46 @@ function draw() {
     var option = list.value;
     
 
+
     //calculate HSV color from mouse coords on color block
     var mag = sqrt(mx*mx+my*my);
     
     if (mouseDown) {
+
+        //Calculate RGB from HSV
+
+        //Center Color
+        var colorFromHSV = [];
+    
         if (colorToggle == 0) {
             centerColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
             centerColor.saturation = (mag/colorWheelRadius)*255;
+
+            colorFromHSV = hsv_to_rgb(centerColor.hue, centerColor.saturation, 1.0);
+            centerColor.red = colorFromHSV.red;
+            centerColor.green = colorFromHSV.green;
+            centerColor.blue = colorFromHSV.blue;
+
         } else if (colorToggle == 1) {
             mainColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
             mainColor.saturation = (mag/colorWheelRadius)*255;
+
+            colorFromHSV = hsv_to_rgb(mainColor.hue, mainColor.saturation, 1.0);
+            mainColor.red = colorFromHSV.red;
+            mainColor.green = colorFromHSV.green;
+            mainColor.blue = colorFromHSV.blue;
+
         } else if (colorToggle == 2) {
             waveColor.hue = (my < 0) ? (acos(mx/mag))/PI/2*360 : (PI*2 - acos(mx/mag))/PI/2*360;
             waveColor.saturation = (mag/colorWheelRadius)*255;
+            
+            colorFromHSV = hsv_to_rgb(waveColor.hue, waveColor.saturation, 1.0);
+            waveColor.red = colorFromHSV.red;
+            waveColor.green = colorFromHSV.green;
+            waveColor.blue = colorFromHSV.blue;
         }
+
     }
-
-    //Calculate RGB from HSV
-
-    //Center Color
-    var colorFromHSV = hsv_to_rgb(centerColor.hue, centerColor.saturation, 1.0);
-    
-    centerColor.red = colorFromHSV.red;
-    centerColor.green = colorFromHSV.green;
-    centerColor.blue = colorFromHSV.blue;
-
-    //Main Color
-    colorFromHSV = hsv_to_rgb(mainColor.hue, mainColor.saturation, 1.0);
-
-    mainColor.red = colorFromHSV.red;
-    mainColor.green = colorFromHSV.green;
-    mainColor.blue = colorFromHSV.blue;
-
-    //Wave Color
-    colorFromHSV = hsv_to_rgb(waveColor.hue, waveColor.saturation, 1.0);
-
-    waveColor.red = colorFromHSV.red;
-    waveColor.green = colorFromHSV.green;
-    waveColor.blue = colorFromHSV.blue;
 
 
     var centerColorDot = document.getElementById("centerColorDot");
@@ -190,10 +206,8 @@ function draw() {
     translate(center.x, center.y, -200);
     
 
-    if (option == 1) {
+    if (option == 0) {
         drawPIL_1();
-    } else if (option == 2) {
-        drawPIL_2();
     } else {
         drawPIL_0();
     }
