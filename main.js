@@ -128,12 +128,32 @@ function draw() {
     }
     }
 
+    //HSV to RGB
+    var colorFromHSV = hsv_to_rgb(centerColor.hue, centerColor.saturation, 1.0);
+
+    centerColor.red = colorFromHSV.red;
+    centerColor.green = colorFromHSV.green;
+    centerColor.blue = colorFromHSV.blue;
+
+    colorFromHSV = hsv_to_rgb(mainColor.hue, mainColor.saturation, 1.0);
+
+    mainColor.red = colorFromHSV.red;
+    mainColor.green = colorFromHSV.green;
+    mainColor.blue = colorFromHSV.blue;
+
+    colorFromHSV = hsv_to_rgb(waveColor.hue, waveColor.saturation, 1.0);
+
+    waveColor.red = colorFromHSV.red;
+    waveColor.green = colorFromHSV.green;
+    waveColor.blue = colorFromHSV.blue;
+
+
     var centerColorDot = document.getElementById("centerColorDot");
     var mainColorDot = document.getElementById("mainColorDot");
     var waveColorDot = document.getElementById("waveColorDot");
-    centerColorDot.style.fill = 'hsl(' + centerColor.hue + ', 100%, ' + ((1.0-centerColor.saturation/255)*50+50) + '%)';
-    mainColorDot.style.fill = 'hsl(' + mainColor.hue + ', 100%, ' + ((1.0-mainColor.saturation/255)*50+50) + '%)';
-    waveColorDot.style.fill = 'hsl(' + waveColor.hue + ', 100%, ' + ((1.0-waveColor.saturation/255)*50+50) + '%)';
+    centerColorDot.style.fill = 'rgb(' + centerColor.red + ',' + centerColor.green + ',' + centerColor.blue + ')';
+    mainColorDot.style.fill = 'rgb(' + mainColor.red + ',' + mainColor.green + ',' + mainColor.blue + ')';
+    waveColorDot.style.fill = 'rgb(' + waveColor.red + ',' + waveColor.green + ',' + waveColor.blue + ')';
     
     
     
@@ -178,8 +198,6 @@ function draw() {
         drawPIL_1();
     } else if (option == 2) {
         drawPIL_2();
-    } else if (option == 3) {
-        drawPIL_3();
     } else {
         drawPIL_0();
     }
@@ -200,7 +218,7 @@ function draw() {
         WAVE COLOR
     */
     
-    colorMode(HSB);
+    colorMode(RGB);
     noFill();
     strokeWeight(2);
     
@@ -210,9 +228,13 @@ function draw() {
   for (var i = 0; i < 1.0; i += 1.0/ringCount) {
       var iSmoothStep = 3*i*i - 2*i*i*i;
       //stroke(mainColor.saturation - (mainColor.saturation - centerColor.saturation)*(1-i)*colorRatio, 255, 255);
-      stroke(mainColor.hue - (mainColor.hue - centerColor.hue)*(1-i + colorRatio/2)*colorRatio, mainColor.saturation - (mainColor.saturation - centerColor.saturation)*(1-i + colorRatio/2)*colorRatio, 255);
+      //stroke(mainColor.hue - (mainColor.hue - centerColor.hue)*(1-i + colorRatio/2)*colorRatio, mainColor.saturation - (mainColor.saturation - centerColor.saturation)*(1-i + colorRatio/2)*colorRatio, 255);
+      stroke(
+            mainColor.red*i*(1.0-colorRatio) + centerColor.red*(1-i)*colorRatio,
+            mainColor.green*i*(1.0-colorRatio) + centerColor.green*(1-i)*colorRatio,
+            mainColor.blue*i*(1.0-colorRatio) + centerColor.blue*(1-i)*colorRatio)
       
-      //Wave ring case
+            //Wave ring case
       if (floor((i-waveOffset) * ringCount) % floor(ringCount/waveCount) == 0 && waveCount > 0) {
           strokeWeight(1 + 4*waveIntensity);
           stroke(waveColor.hue - (waveColor.hue - mainColor.hue)*(1.0-waveIntensity), 255*(1-waveIntensity), 126);
@@ -257,6 +279,47 @@ function hsv_to_hsl(h, s, v) {
     }
 
     return [h, s, l]
+}
+
+function hsv_to_rgb(h, s, v) {
+
+    var color = [];
+
+    var c = s/255;
+    var x = c*(1-abs((h/60) % 2 - 1));
+    var m = 1.0 - c;
+    var rgb = [];
+    if (h < 60) {
+        rgb.r = c;
+        rgb.g = x;
+        rgb.b = 0;
+    } else if (h < 120) {
+        rgb.r = x;
+        rgb.g = c;
+        rgb.b = 0;
+    } else if (h < 180) {
+        rgb.r = 0;
+        rgb.g = c;
+        rgb.b = x;
+    } else if (h < 240) {
+        rgb.r = 0;
+        rgb.g = x;
+        rgb.b = c;
+    } else if (h < 300) {
+        rgb.r = x;
+        rgb.g = 0;
+        rgb.b = c;
+    } else if (h < 360) {
+        rgb.r = c;
+        rgb.g = 0;
+        rgb.b = x;
+    }
+
+    color.red = (rgb.r+m)*255;
+    color.green = (rgb.g+m)*255;
+    color.blue = (rgb.b+m)*255;
+
+    return color;
 }
 
 function drawPIL_0() {
